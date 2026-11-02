@@ -24,7 +24,7 @@ import os
 # ─────────────────────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="Análisis de Casino - Póker",
-    page_icon="🃏",
+    page_icon="♠",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -85,7 +85,7 @@ modelos = entrenar_modelos(df)
 # ─────────────────────────────────────────────────────────────────────────────
 # 3. SIDEBAR — FILTROS
 # ─────────────────────────────────────────────────────────────────────────────
-st.sidebar.title("🎰 Filtros del Dataset")
+st.sidebar.title("Filtros del Dataset")
 st.sidebar.markdown("---")
 
 # Filtro: tipo de mano
@@ -128,7 +128,7 @@ st.sidebar.markdown(f"**Registros visibles:** {len(df_filtrado):,} / {len(df):,}
 # ─────────────────────────────────────────────────────────────────────────────
 # 4. ENCABEZADO PRINCIPAL
 # ─────────────────────────────────────────────────────────────────────────────
-st.title("🃏 Análisis de Casino — Dataset de Manos de Póker")
+st.title("Analisis de Casino - Dataset de Manos de Poker")
 st.markdown("""
 **Dataset:** UCI Poker Hand | **Registros:** 5,000 manos | **Materia:** Extracción de Conocimientos de Base de Datos
 """)
@@ -155,7 +155,7 @@ st.markdown("---")
 # ─────────────────────────────────────────────────────────────────────────────
 # 6. PESTAÑAS PRINCIPALES
 # ─────────────────────────────────────────────────────────────────────────────
-tab1, tab2, tab3 = st.tabs(["📊 ETL / Datos", "📈 Regresión Lineal", "🌳 Árbol de Decisión"])
+tab1, tab2, tab3 = st.tabs(["ETL / Datos", "Regresion Lineal", "Arbol de Decision"])
 
 # ══════════════════════════════════════════════════════
 # PESTAÑA 1: ETL / DATOS
@@ -256,7 +256,7 @@ with tab2:
 
     # Predictor interactivo
     st.markdown("---")
-    st.subheader("🔮 Predicción Interactiva — Regresión")
+    st.subheader("Prediccion Interactiva - Regresion")
     c_p1, c_p2, c_p3, c_p4 = st.columns(4)
     with c_p1:
         p_c1 = st.slider("Carta 1", 1, 13, 7)
@@ -337,7 +337,7 @@ with tab3:
 
     # Predictor interactivo
     st.markdown("---")
-    st.subheader("🔮 Predicción Interactiva — Árbol de Decisión")
+    st.subheader("Prediccion Interactiva - Arbol de Decision")
     c_a1, c_a2, c_a3 = st.columns(3)
     with c_a1:
         a_c1 = st.slider("Carta 1", 1, 13, 5, key="a1")
@@ -362,9 +362,9 @@ with tab3:
         prob_gana  = modelos["modelo_arbol"].predict_proba(entrada_arb)[0][1] * 100
 
         if pred_clase == 1:
-            st.success(f"✅ **El jugador GANARÁ** — Probabilidad: {prob_gana:.1f}%")
+            st.success(f"El jugador GANARA -- Probabilidad: {prob_gana:.1f}%")
         else:
-            st.error(f"❌ **El jugador NO GANARÁ** — Probabilidad de ganar: {prob_gana:.1f}%")
+            st.error(f"El jugador NO GANARA -- Probabilidad de ganar: {prob_gana:.1f}%")
         st.markdown(f"*Cartas distintas: {a_dist} | Suma: {a_suma} | Carta máxima: {a_max}*")
 
 # Footer
