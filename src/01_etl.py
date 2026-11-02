@@ -216,7 +216,7 @@ print("âœ” GrÃ¡fica 2 guardada: 02_histograma_suma_cartas.png")
 
 # GrÃ¡fica 3: Manos ganadoras vs perdedoras (pie chart)
 fig, ax = plt.subplots(figsize=(6, 6))
-conteo_gano = df["gano"].value_counts()
+conteo_gano = df["gano"].value_counts().reindex([1, 0], fill_value=0)
 etiquetas = ["GanÃ³ (par o mejor)", "PerdiÃ³ (carta alta)"]
 ax.pie(conteo_gano, labels=etiquetas, autopct="%1.1f%%",
        colors=["#2ca02c", "#d62728"], startangle=140,
@@ -297,5 +297,4 @@ print(f"    â†’ 3 grÃ¡ficas PNG en reports/figures/")
 print("=" * 65)
 print("   ETL COMPLETADO EXITOSAMENTE")
 print("=" * 65)
-
 

@@ -130,9 +130,8 @@ st.sidebar.markdown(f"**Registros visibles:** {len(df_filtrado):,} / {len(df):,}
 # ─────────────────────────────────────────────────────────────────────────────
 st.title("Analisis de Casino - Dataset de Manos de Poker")
 st.markdown("""
-**Dataset:** UCI Poker Hand | **Registros:** 5,000 manos | **Materia:** Extracción de Conocimientos de Base de Datos
+**Dataset:** UCI Poker Hand | **Registros:** 5,000 manos
 """)
-st.markdown("---")
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 5. KPIs PRINCIPALES
@@ -187,11 +186,16 @@ with tab1:
 
     with col_b:
         st.subheader("Proporción Ganó / Perdió")
-        conteo_gano = df_filtrado["gano"].value_counts()
+        conteo_gano = df_filtrado["gano"].value_counts().reindex([0, 1], fill_value=0)
         fig2, ax2 = plt.subplots(figsize=(5, 5))
-        ax2.pie(conteo_gano, labels=["Perdió", "Ganó"],
-                autopct="%1.1f%%", colors=["#d62728", "#2ca02c"],
-                startangle=140, wedgeprops={"edgecolor":"white"})
+        if conteo_gano.sum() > 0:
+            ax2.pie(conteo_gano, labels=["Perdió", "Ganó"],
+                    autopct="%1.1f%%", colors=["#d62728", "#2ca02c"],
+                    startangle=140, wedgeprops={"edgecolor":"white"})
+        else:
+            ax2.text(0.5, 0.5, "Sin datos para mostrar",
+                     ha="center", va="center", transform=ax2.transAxes)
+            ax2.axis("off")
         ax2.set_title("Ganó vs Perdió", fontsize=12)
         plt.tight_layout()
         st.pyplot(fig2)
@@ -366,7 +370,3 @@ with tab3:
         else:
             st.error(f"El jugador NO GANARA -- Probabilidad de ganar: {prob_gana:.1f}%")
         st.markdown(f"*Cartas distintas: {a_dist} | Suma: {a_suma} | Carta máxima: {a_max}*")
-
-# Footer
-st.markdown("---")
-st.markdown("*Proyecto Casino — Extracción de Conocimientos de Base de Datos | Universidad JABAKH*")

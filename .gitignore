@@ -37,6 +37,9 @@ data/raw/*.gz
 # Streamlit
 .streamlit/
 
+# Reportes y graficas generados localmente
+reports/
+
 # OS
 .DS_Store
 Thumbs.db

@@ -8,7 +8,7 @@
 
 ## Descripcion del Proyecto
 
-Proyecto de mineria de datos que aplica el proceso ETL completo, regresion lineal y arbol de decision sobre el dataset publico **UCI Poker Hand**, el cual contiene informacion de manos de poker clasificadas por tipo. Se desarrollo adicionalmente un dashboard interactivo con Streamlit y un reporte academico en Word.
+Proyecto de mineria de datos que aplica el proceso ETL completo, regresion lineal y arbol de decision sobre el dataset publico **UCI Poker Hand**, el cual contiene informacion de manos de poker clasificadas por tipo. Se desarrollo adicionalmente un dashboard interactivo con Streamlit.
 
 ---
 
@@ -16,7 +16,7 @@ Proyecto de mineria de datos que aplica el proceso ETL completo, regresion linea
 
 ```bash
 # 1. Clonar el repositorio
-git clone https://github.com/[USUARIO]/analisis-casino-mineria-datos.git
+git clone https://github.com/BenjaminCota/analisis-casino-mineria-datos.git
 cd analisis-casino-mineria-datos
 
 # 2. Crear entorno virtual (recomendado)
@@ -42,13 +42,13 @@ Genera: `data/raw/poker_manos_raw.csv`, `data/clean/poker_manos_clean.csv`, `dat
 ```bash
 python 02_regresion_lineal.py
 ```
-Genera: 3 graficas de regresion en `reports/figures/`.
+Genera: 3 graficas de regresion en `reports/figures/` (carpeta local, excluida de Git).
 
 ### Fase 3 - Arbol de Decision
 ```bash
 python 03_arbol_decision.py
 ```
-Genera: 4 graficas del arbol en `reports/figures/`.
+Genera: 4 graficas del arbol en `reports/figures/` (carpeta local, excluida de Git).
 
 ### Fase 4 - Dashboard Streamlit
 ```bash
@@ -56,13 +56,6 @@ cd ..
 streamlit run app.py
 ```
 Abre el navegador en `http://localhost:8501`
-
-### Fase 5 - Reporte Word
-```bash
-cd reports
-python generar_word.py
-```
-Genera: `reports/reporte_casino.docx`
 
 ---
 
@@ -77,10 +70,6 @@ proyecto-casino/
 │   ├── 01_etl.py         <- Proceso ETL completo
 │   ├── 02_regresion_lineal.py  <- Modelo de regresion
 │   └── 03_arbol_decision.py    <- Arbol de decision
-├── reports/
-│   ├── figures/          <- Graficas PNG generadas
-│   ├── generar_word.py   <- Generador del reporte Word
-│   └── reporte_casino.docx     <- Reporte final
 ├── app.py                <- Dashboard Streamlit
 ├── requirements.txt
 ├── .gitignore
@@ -114,7 +103,6 @@ proyecto-casino/
 | `scikit-learn` | Modelos de ML |
 | `streamlit` | Dashboard interactivo |
 | `openpyxl` | Exportar a Excel |
-| `python-docx` | Generacion del reporte Word |
 
 ---
 
