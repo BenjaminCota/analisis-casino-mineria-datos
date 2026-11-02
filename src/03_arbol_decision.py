@@ -1,9 +1,9 @@
-# =============================================================================
-# PROYECTO: ANÁLISIS DE DATOS DE CASINO / PÓKER
-# SCRIPT:   03_arbol_decision.py
-# OBJETIVO: Clasificar si una mano de póker es GANADORA o PERDEDORA
-# MATERIA:  Extracción de Conocimientos de Base de Datos
-# =============================================================================
+
+
+
+
+
+
 
 import pandas as pd
 import numpy as np
@@ -15,16 +15,16 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 import os
 
-# ─────────────────────────────────────────────────────────────────────────────
-# 1. CONFIGURACIÓN DE RUTAS
-# ─────────────────────────────────────────────────────────────────────────────
+
+
+
 RUTA_FIGURAS = os.path.join("..", "reports", "figures")
 RUTA_CLEAN   = os.path.join("..", "data", "clean")
 os.makedirs(RUTA_FIGURAS, exist_ok=True)
 
-# ─────────────────────────────────────────────────────────────────────────────
-# 2. CARGAR EL DATASET LIMPIO
-# ─────────────────────────────────────────────────────────────────────────────
+
+
+
 print("=" * 65)
 print("   ÁRBOL DE DECISIÓN — Predicción: ¿Ganó o Perdió?")
 print("=" * 65)
@@ -37,25 +37,25 @@ print(f"\nDistribución de la variable objetivo (gano):")
 print(df["gano"].value_counts().rename({0: "Perdio (0)", 1: "Gano (1)"}).to_string())
 print(f"  % ganadoras: {df['gano'].mean()*100:.2f}%")
 
-# ─────────────────────────────────────────────────────────────────────────────
-# 3. DEFINIR VARIABLES X (predictoras) y y (objetivo binario)
-# ─────────────────────────────────────────────────────────────────────────────
+
+
+
 print("\n" + "-" * 50)
 print("VARIABLES DEL MODELO:")
 print("-" * 50)
 
 X = df[["carta1", "carta2", "carta3", "carta4", "carta5",
         "carta_maxima", "cartas_distintas", "suma_cartas"]]
-y = df["gano"]   # 0 = perdio, 1 = gano
+y = df["gano"]
 
 print("Variables predictoras (X):")
 for col in X.columns:
     print(f"  - {col}")
 print(f"\nVariable objetivo (y): gano  (0=perdio, 1=gano)")
 
-# ─────────────────────────────────────────────────────────────────────────────
-# 4. DIVIDIR EN ENTRENAMIENTO Y PRUEBA (70% / 30%)
-# ─────────────────────────────────────────────────────────────────────────────
+
+
+
 X_entrenamiento, X_prueba, y_entrenamiento, y_prueba = train_test_split(
     X, y, test_size=0.3, random_state=42
 )
@@ -64,17 +64,17 @@ print(f"\nDIVISIÓN DEL DATASET:")
 print(f"  Entrenamiento: {X_entrenamiento.shape[0]:,} filas (70%)")
 print(f"  Prueba:        {X_prueba.shape[0]:,} filas (30%)")
 
-# ─────────────────────────────────────────────────────────────────────────────
-# 5. ENTRENAR EL ÁRBOL DE DECISIÓN
-# ─────────────────────────────────────────────────────────────────────────────
+
+
+
 print("\n" + "=" * 65)
 print("   ENTRENAMIENTO DEL ÁRBOL DE DECISIÓN")
 print("=" * 65)
 
-# max_depth=5: limitamos la profundidad para evitar sobreajuste (overfitting).
-# Un árbol sin límite memoriza el ruido del conjunto de entrenamiento y da
-# muy malos resultados en datos nuevos. Con max_depth=5 el árbol generaliza
-# mejor y es más fácil de interpretar visualmente.
+
+
+
+
 modelo = DecisionTreeClassifier(max_depth=5, random_state=42)
 modelo.fit(X_entrenamiento, y_entrenamiento)
 
@@ -83,9 +83,9 @@ print(f"  max_depth = 5  (limitado para evitar sobreajuste)")
 print(f"  Profundidad real del árbol: {modelo.get_depth()}")
 print(f"  Número de hojas (nodos terminales): {modelo.get_n_leaves()}")
 
-# ─────────────────────────────────────────────────────────────────────────────
-# 6. PREDICCIONES Y MÉTRICAS
-# ─────────────────────────────────────────────────────────────────────────────
+
+
+
 print("\n" + "=" * 65)
 print("   EVALUACIÓN DEL MODELO")
 print("=" * 65)
@@ -113,23 +113,23 @@ print("\nREPORTE DE CLASIFICACIÓN:")
 print(classification_report(y_prueba, predicciones,
       target_names=["Perdio (0)", "Gano (1)"]))
 
-# ─────────────────────────────────────────────────────────────────────────────
-# 7. IMPORTANCIA DE VARIABLES
-# ─────────────────────────────────────────────────────────────────────────────
+
+
+
 print("\nIMPORTANCIA DE VARIABLES:")
 importancias = pd.Series(modelo.feature_importances_, index=X.columns)
 importancias = importancias.sort_values(ascending=False)
 for var, imp in importancias.items():
     print(f"  {var:22s}: {imp:.4f}  ({imp*100:.2f}%)")
 
-# ─────────────────────────────────────────────────────────────────────────────
-# 8. PREDICCIÓN DE CASOS NUEVOS
-# ─────────────────────────────────────────────────────────────────────────────
+
+
+
 print("\n" + "=" * 65)
 print("   PREDICCIÓN — CASOS NUEVOS")
 print("=" * 65)
 
-# Caso único
+
 nuevo_jugador = pd.DataFrame({
     "carta1": [1], "carta2": [13], "carta3": [12],
     "carta4": [11], "carta5": [10],
@@ -144,7 +144,7 @@ print(f"  Prediccion:   {resultado}")
 print(f"  Probabilidad de ganar:  {prob[1]*100:.1f}%")
 print(f"  Probabilidad de perder: {prob[0]*100:.1f}%")
 
-# Varios casos nuevos
+
 nuevos_casos = pd.DataFrame({
     "carta1":         [1,  5,  7,  13,  2,  3],
     "carta2":         [13, 5,  7,  13,  2,  3],
@@ -163,11 +163,11 @@ nuevos_casos["prob_ganar"] = (probs[:, 1] * 100).round(1)
 print("\nPREDICCIÓN DE VARIOS CASOS NUEVOS:")
 print(nuevos_casos[["carta1","carta2","carta3","carta4","carta5","suma_cartas","resultado","prob_ganar"]].to_string(index=False))
 
-# ─────────────────────────────────────────────────────────────────────────────
-# 9. GRÁFICAS
-# ─────────────────────────────────────────────────────────────────────────────
 
-# Gráfica 1: Árbol de decisión
+
+
+
+
 fig, ax = plt.subplots(figsize=(20, 8))
 plot_tree(modelo, feature_names=X.columns.tolist(),
           class_names=["Perdio", "Gano"],
@@ -179,7 +179,7 @@ plt.tight_layout()
 plt.savefig(os.path.join(RUTA_FIGURAS, "07_arbol_decision.png"), dpi=120, bbox_inches="tight")
 print("\n[OK] Gráfica guardada: 07_arbol_decision.png")
 
-# Gráfica 2: Importancia de variables
+
 fig, ax = plt.subplots(figsize=(8, 5))
 colores = plt.cm.RdYlGn(np.linspace(0.3, 0.9, len(importancias)))
 ax.barh(importancias.index, importancias.values, color=colores[::-1])
@@ -190,7 +190,7 @@ plt.tight_layout()
 plt.savefig(os.path.join(RUTA_FIGURAS, "08_importancia_variables.png"), dpi=150)
 print("[OK] Gráfica guardada: 08_importancia_variables.png")
 
-# Gráfica 3: Predicciones de varios casos (verde=gana, rojo=pierde)
+
 fig, ax = plt.subplots(figsize=(10, 4))
 colores_pred = ["#2ca02c" if r == "GANARA" else "#d62728" for r in nuevos_casos["resultado"]]
 etiquetas = [f"Mano {i+1}\nSuma={s}" for i, s in enumerate(nuevos_casos["suma_cartas"])]
@@ -208,7 +208,7 @@ plt.tight_layout()
 plt.savefig(os.path.join(RUTA_FIGURAS, "09_predicciones_nuevos_jugadores.png"), dpi=150)
 print("[OK] Gráfica guardada: 09_predicciones_nuevos_jugadores.png")
 
-# Gráfica 4: Matriz de confusión visual
+
 fig, ax = plt.subplots(figsize=(5, 4))
 im = ax.imshow(mc, interpolation="nearest", cmap="Blues")
 ax.set_title("Matriz de Confusión", fontsize=13, fontweight="bold")
@@ -222,9 +222,9 @@ plt.tight_layout()
 plt.savefig(os.path.join(RUTA_FIGURAS, "10_matriz_confusion.png"), dpi=150)
 print("[OK] Gráfica guardada: 10_matriz_confusion.png")
 
-# ─────────────────────────────────────────────────────────────────────────────
-# 10. RESUMEN FINAL
-# ─────────────────────────────────────────────────────────────────────────────
+
+
+
 print("\n" + "=" * 65)
 print("   RESUMEN DE ÁRBOL DE DECISIÓN")
 print("=" * 65)

@@ -1,9 +1,9 @@
-# =============================================================================
-# PROYECTO: ANÁLISIS DE DATOS DE CASINO / PÓKER
-# ARCHIVO:  app.py  —  Dashboard Interactivo con Streamlit
-# EJECUTAR: streamlit run app.py
-# MATERIA:  Extracción de Conocimientos de Base de Datos
-# =============================================================================
+
+
+
+
+
+
 
 import streamlit as st
 import pandas as pd
@@ -19,9 +19,9 @@ from sklearn.metrics import (mean_absolute_error, mean_squared_error,
                              classification_report)
 import os
 
-# ─────────────────────────────────────────────────────────────────────────────
-# CONFIGURACIÓN DE LA PÁGINA
-# ─────────────────────────────────────────────────────────────────────────────
+
+
+
 st.set_page_config(
     page_title="Análisis de Casino - Póker",
     page_icon="♠",
@@ -29,9 +29,9 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# ─────────────────────────────────────────────────────────────────────────────
-# 1. CARGA DE DATOS (con caché para mayor eficiencia)
-# ─────────────────────────────────────────────────────────────────────────────
+
+
+
 @st.cache_data
 def cargar_datos():
     ruta = os.path.join("data", "clean", "poker_manos_clean.csv")
@@ -40,12 +40,12 @@ def cargar_datos():
 
 df = cargar_datos()
 
-# ─────────────────────────────────────────────────────────────────────────────
-# 2. ENTRENAMIENTO DE MODELOS (con caché)
-# ─────────────────────────────────────────────────────────────────────────────
+
+
+
 @st.cache_data
 def entrenar_modelos(df):
-    # --- Regresión lineal ---
+
     X_reg = df[["carta1","carta2","carta3","carta4","carta5","cartas_distintas","clase_mano"]]
     y_reg = df["carta_maxima"]
     X_r_train, X_r_test, y_r_train, y_r_test = train_test_split(
@@ -57,7 +57,7 @@ def entrenar_modelos(df):
     rmse = np.sqrt(mean_squared_error(y_r_test, pred_reg))
     r2   = r2_score(y_r_test, pred_reg)
 
-    # --- Árbol de decisión ---
+
     X_cls = df[["carta1","carta2","carta3","carta4","carta5",
                 "carta_maxima","cartas_distintas","suma_cartas"]]
     y_cls = df["gano"]
@@ -82,13 +82,13 @@ def entrenar_modelos(df):
 
 modelos = entrenar_modelos(df)
 
-# ─────────────────────────────────────────────────────────────────────────────
-# 3. SIDEBAR — FILTROS
-# ─────────────────────────────────────────────────────────────────────────────
+
+
+
 st.sidebar.title("Filtros del Dataset")
 st.sidebar.markdown("---")
 
-# Filtro: tipo de mano
+
 manos_disponibles = sorted(df["nombre_mano"].unique().tolist())
 manos_seleccionadas = st.sidebar.multiselect(
     "Tipos de mano a mostrar",
@@ -96,7 +96,7 @@ manos_seleccionadas = st.sidebar.multiselect(
     default=manos_disponibles
 )
 
-# Filtro: rango de suma de cartas
+
 min_suma = int(df["suma_cartas"].min())
 max_suma = int(df["suma_cartas"].max())
 rango_suma = st.sidebar.slider(
@@ -105,14 +105,14 @@ rango_suma = st.sidebar.slider(
     value=(min_suma, max_suma)
 )
 
-# Filtro: sólo ganadoras / sólo perdedoras
+
 filtro_gano = st.sidebar.radio(
     "Mostrar manos:",
     options=["Todas", "Sólo ganadoras", "Sólo perdedoras"],
     index=0
 )
 
-# Aplicar filtros
+
 df_filtrado = df[
     (df["nombre_mano"].isin(manos_seleccionadas)) &
     (df["suma_cartas"].between(*rango_suma))
@@ -125,17 +125,17 @@ elif filtro_gano == "Sólo perdedoras":
 st.sidebar.markdown("---")
 st.sidebar.markdown(f"**Registros visibles:** {len(df_filtrado):,} / {len(df):,}")
 
-# ─────────────────────────────────────────────────────────────────────────────
-# 4. ENCABEZADO PRINCIPAL
-# ─────────────────────────────────────────────────────────────────────────────
+
+
+
 st.title("Analisis de Casino - Dataset de Manos de Poker")
 st.markdown("""
 **Dataset:** UCI Poker Hand | **Registros:** 5,000 manos
 """)
 
-# ─────────────────────────────────────────────────────────────────────────────
-# 5. KPIs PRINCIPALES
-# ─────────────────────────────────────────────────────────────────────────────
+
+
+
 col1, col2, col3, col4, col5 = st.columns(5)
 
 with col1:
@@ -151,18 +151,18 @@ with col5:
 
 st.markdown("---")
 
-# ─────────────────────────────────────────────────────────────────────────────
-# 6. PESTAÑAS PRINCIPALES
-# ─────────────────────────────────────────────────────────────────────────────
+
+
+
 tab1, tab2, tab3 = st.tabs(["ETL / Datos", "Regresion Lineal", "Arbol de Decision"])
 
-# ══════════════════════════════════════════════════════
-# PESTAÑA 1: ETL / DATOS
-# ══════════════════════════════════════════════════════
+
+
+
 with tab1:
     st.header("Exploración del Dataset (Post-ETL)")
 
-    # Vista de datos
+
     st.subheader("Muestra del dataset limpio")
     st.dataframe(df_filtrado.head(50), use_container_width=True)
 
@@ -218,14 +218,14 @@ with tab1:
     tabla = df_filtrado.groupby("nombre_mano")[["suma_cartas","carta_maxima","cartas_distintas"]].mean().round(2)
     st.dataframe(tabla, use_container_width=True)
 
-# ══════════════════════════════════════════════════════
-# PESTAÑA 2: REGRESIÓN LINEAL
-# ══════════════════════════════════════════════════════
+
+
+
 with tab2:
     st.header("Regresión Lineal — Predicción de Carta Máxima")
     st.info("**Variable objetivo:** `carta_maxima` — El modelo predice el valor de la carta más alta de la mano usando las 5 cartas individuales, `cartas_distintas` y `clase_mano` como predictoras.")
 
-    # Métricas
+
     c1, c2, c3 = st.columns(3)
     with c1: st.metric("MAE", f"{modelos['mae']:.4f}")
     with c2: st.metric("RMSE", f"{modelos['rmse']:.4f}")
@@ -258,7 +258,7 @@ with tab2:
         ax5.grid(axis="x", alpha=0.3)
         plt.tight_layout(); st.pyplot(fig5); plt.close()
 
-    # Predictor interactivo
+
     st.markdown("---")
     st.subheader("Prediccion Interactiva - Regresion")
     c_p1, c_p2, c_p3, c_p4 = st.columns(4)
@@ -284,14 +284,14 @@ with tab2:
         real_max = max(p_c1, p_c2, p_c3, p_c4, p_c5)
         st.success(f"**Carta máxima real:** {real_max} | **Predicción del modelo:** {pred_val:.2f} | **Error:** {abs(real_max - pred_val):.2f}")
 
-# ══════════════════════════════════════════════════════
-# PESTAÑA 3: ÁRBOL DE DECISIÓN
-# ══════════════════════════════════════════════════════
+
+
+
 with tab3:
     st.header("Árbol de Decisión — ¿La mano ganará o perderá?")
     st.info("**Variable objetivo:** `gano` (0=Perdió, 1=Ganó). Un par o mejor = ganadora. Carta alta sola = perdedora.")
 
-    # Métricas
+
     c1, c2, c3 = st.columns(3)
     with c1: st.metric("Exactitud", f"{modelos['exactitud']*100:.2f}%")
     with c2: st.metric("Precisión (Ganó)", f"{modelos['reporte']['Gano']['precision']*100:.2f}%")
@@ -339,7 +339,7 @@ with tab3:
               impurity=False, proportion=True)
     plt.tight_layout(); st.pyplot(fig8); plt.close()
 
-    # Predictor interactivo
+
     st.markdown("---")
     st.subheader("Prediccion Interactiva - Arbol de Decision")
     c_a1, c_a2, c_a3 = st.columns(3)
